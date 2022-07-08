@@ -1,9 +1,11 @@
 from sqlalchemy import Column, Integer, Text
-from app import BaseModel, engine
+
+from models.BaseModel import BaseModel
 
 
 class Permission(BaseModel):
     __tablename__ = 'permissions'
+
     id = Column(Integer, primary_key=True)
     name = Column(Text, index=True)
 

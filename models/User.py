@@ -5,11 +5,13 @@ from sqlalchemy import Column, Integer, Text, Date, Boolean, ForeignKey, DateTim
 from sqlalchemy.orm import relationship
 
 from app import BaseModel, engine
+from classes.Password import Password
+from models.Role import Role
 
 
 class User(BaseModel):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
+
     uuid = Column(Text, unique=True)
     name = Column(Text, nullable=False, index=True)
     surname = Column(Text, nullable=False, index=True)
@@ -25,7 +27,7 @@ class User(BaseModel):
     last_active = Column(DateTime)
     is_active = Column(Boolean, default=True)
 
-    role = relationship("Role", lazy='joined')
+    role = relationship('Role', lazy='joined')
 
     def from_object(self, record: dict):
         password_helpers = Password()

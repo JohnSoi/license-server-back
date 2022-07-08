@@ -6,6 +6,7 @@ from models.BaseModel import BaseModel
 
 class Role(BaseModel):
     __tablename__ = 'roles'
+
     id = Column(Integer, primary_key=True)
     name = Column(Text, index=True)
     permissions_ids = Column(ARRAY(Integer))
@@ -21,9 +22,8 @@ class Role(BaseModel):
             'permissions_ids': self.permissions_ids
         }
 
-    @staticmethod
-    def add_default_data():
-        engine.session.add_all([
+    def add_default_data(self):
+        self.engine.session.add_all([
             Role(name='Суперпользователь', permissions_ids=[0]),
         ])
 

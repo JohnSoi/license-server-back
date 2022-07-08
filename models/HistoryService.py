@@ -1,7 +1,4 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Text, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Text, Integer
 
 from constants.history_service import HUMAN_AREA_NAME
 from models.BaseModel import BaseModel
@@ -9,12 +6,11 @@ from models.BaseModel import BaseModel
 
 class HistoryService(BaseModel):
     __tablename__ = 'history_service'
+
     object_id = Column(Integer)
     type = Column(Text, index=True)
     area = Column(Text, index=True)
     text = Column(Text, index=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user_create = relationship("User", lazy='joined')
 
     def from_object(self, record: dict):
         self.type = record.get('type')

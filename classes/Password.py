@@ -1,6 +1,10 @@
 """Работа с паролями"""
 import hashlib
+import string
 import uuid
+import random
+
+from random_username.generate import generate_username
 
 
 class Password:
@@ -28,3 +32,21 @@ class Password:
         """
         password, salt = hashed_password.split(':')
         return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
+
+    @staticmethod
+    def create_random_login() -> str:
+        """
+        Создание случайного логина
+
+        :return Случайный логин
+        """
+        return generate_username(1)[0]
+
+    @staticmethod
+    def create_random_password() -> str:
+        """
+        Создание случайного пароля со спец символами
+
+        :return Случйаный пароль
+        """
+        return ''.join(random.choice(string.printable) for i in range(8))

@@ -1,5 +1,5 @@
 """Базовая реализация модели"""
-from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy import Column, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
 from app import BaseModel as Model, engine
@@ -15,9 +15,13 @@ class BaseModel(Model):
     update_at = Column(DateTime, nullable=True)
     delete_at = Column(DateTime, nullable=True)
 
-    create_user_id = relationship("User", lazy='joined')
-    update_user_id = relationship("User", lazy='joined')
-    delete_user_id = relationship("User", lazy='joined')
+    create_user_id = Column(Integer, ForeignKey('users.id'))
+    update_user_id = Column(Integer, ForeignKey('users.id'))
+    delete_user_id = Column(Integer, ForeignKey('users.id'))
+
+    create_user = relationship("User", lazy='joined')
+    update_user = relationship("User", lazy='joined')
+    delete_user = relationship("User", lazy='joined')
 
     def from_dict(self, record: dict) -> None:
         """
