@@ -23,14 +23,17 @@ class BaseModel(Model):
     update_at = Column(DateTime, nullable=True)
     delete_at = Column(DateTime, nullable=True)
 
-    def from_dict(self, record: dict) -> None:
+    def from_dict(self, record: dict) -> int:
         """
         Создание записи модели из объекта
 
         :param record:
         :return:
         """
-        return
+
+        self._manual_fillable(record)
+
+        return 0
 
     def to_dict(self) -> dict:
         """
@@ -50,6 +53,9 @@ class BaseModel(Model):
         """
         Добавлени начальных данных
         """
+        pass
+
+    def _manual_fillable(self, record: dict):
         pass
 
     def _get_columns(self) -> List[str]:
