@@ -1,6 +1,8 @@
 """Базовая реализация модели"""
-from sqlalchemy import Column, Integer, DateTime, ForeignKey
-from sqlalchemy.orm import relationship, declarative_mixin, declared_attr
+from typing import List
+
+from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy.orm import declarative_mixin
 
 from app import BaseModel as Model, engine
 
@@ -11,35 +13,15 @@ class BaseModel(Model):
     __abstract__ = True
     session = engine.session
 
+    _gurded: List[str] = []
+    _fillable: List[str] = []
+    _manual_fillable: List[str] = []
+
     id = Column(Integer, primary_key=True)
 
     create_at = Column(DateTime)
     update_at = Column(DateTime, nullable=True)
     delete_at = Column(DateTime, nullable=True)
-
-    @declared_attr
-    def create_user_id(self):
-        return Column(Integer, ForeignKey('users.id'))
-
-    @declared_attr
-    def update_user_id(self):
-        return Column(Integer, ForeignKey('users.id'))
-
-    @declared_attr
-    def delete_user_id(self):
-        return Column(Integer, ForeignKey('users.id'))
-
-    @declared_attr
-    def create_user(self):
-        return relationship("User", lazy='joined')
-
-    @declared_attr
-    def update_user(self):
-        return relationship("User", lazy='joined')
-
-    @declared_attr
-    def delete_user(self):
-        return relationship("User", lazy='joined')
 
     def from_dict(self, record: dict) -> None:
         """
@@ -56,10 +38,31 @@ class BaseModel(Model):
 
         :return: Данные модели в виде словаря
         """
-        return {}
+        result = {}
+        columns = self._get_columns()
+
+        for column_name in columns:
+            result[column_name] = getattr(self, column_name)
+        
+        return result
 
     def add_default_data(self):
         """
         Добавлени начальных данных
         """
         pass
+
+    def _get_columns(self) -> List[str]:
+        """
+        Получение не защищенных колонок модели
+
+        :return: Список доступных колонок
+        """
+        result = []
+
+        columns = self.metadata.tables.get(self.__tablename__).columns
+
+        if columns:
+            result = [column_name for column_name in columns.keys() if column_name not in self._gurded]
+
+        return result

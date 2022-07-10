@@ -1,22 +1,22 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, Text, Date, Boolean, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, Text, Date, Boolean, DateTime
 
 from classes.Password import Password
-from app import BaseModel
-from models.Role import Role
+from models.BaseModel import BaseModel
 
 
 class User(BaseModel):
     __tablename__ = 'users'
+
+    _gurded = ['password']
 
     id = Column(Integer, primary_key=True)
     uuid = Column(Text, unique=True)
     name = Column(Text, nullable=False, index=True)
     surname = Column(Text, nullable=False, index=True)
     second_name = Column(Text, nullable=True)
-    role_id = Column(Integer, ForeignKey('roles.id'))
     photo_url = Column(Text)
     login = Column(Text, nullable=False, index=True)
     password = Column(Text, nullable=False)
@@ -27,7 +27,7 @@ class User(BaseModel):
     def add_default_data(self):
         password_helpers = Password()
 
-        self.engine.session.add_all([
+        self.session.add_all([
             User(
                 uuid=str(uuid.uuid4()),
                 login='default',
@@ -36,9 +36,8 @@ class User(BaseModel):
                 surname='user',
                 second_name='user',
                 date_birthday=datetime.now().date(),
-                role=self.engine.session.query(Role).filter(Role.name == 'Суперпользователь').first(),
                 is_active=True,
-                date_create=datetime.now().date(),
+                create_at=datetime.now().date(),
             )
         ])
-        self.engine.session.commit()
+        self.session.commit()
