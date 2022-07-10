@@ -36,13 +36,7 @@ FROM
 """
 
 NEW_CLIENTS = """
-WITH all_clients AS (
-	SELECT 
-		COUNT(*) AS "value",
-		'Все клиенты' AS "title"
-	FROM 
-		"clients"
-), last_week_clients AS (
+WITH last_week_clients AS (
 	SELECT 
 		COUNT(*) AS "value",
 		'Новые за неделю' AS "title"
@@ -59,8 +53,6 @@ WITH all_clients AS (
 	WHERE
 	    CURRENT_DATE + interval '1 month' > "create_at"
 ), process AS (
-	SELECT * FROM "all_clients" 
-	UNION
 	SELECT * FROM "last_week_clients"
 	UNION
 	SELECT * FROM "last_month_clients"
@@ -73,39 +65,31 @@ FROM
 """
 
 TYPE_LICENSE_CLIENT = """
-WITH all_clients AS (
+WITH paid_clients AS (
 	SELECT 
 		COUNT(*) AS "value",
-		'Все клиенты' AS "title"
-	FROM 
-		"clients"
-), paid_clients AS (
-	SELECT 
-		COUNT(*) AS "value",
-		'Платные клиенты' AS "title"
+		'Платные' AS "title"
 	FROM 
 		"clients"
 	WHERE
-		"license_id" IN (SELECT uuid FROM "licenses" WHERE "cost" > 0)
+		"license_id" IN (SELECT id FROM "licenses" WHERE "cost" > 0)
 ), free_clients AS (
 	SELECT 
 		COUNT(*) AS "value",
-		'Бесплатные клиенты' AS "title"
+		'Бесплатные' AS "title"
 	FROM 
 		"clients"
 	WHERE
-		"license_id" IN (SELECT uuid FROM "licenses" WHERE "cost" = 0)
+		"license_id" IN (SELECT id FROM "licenses" WHERE "cost" = 0)
 ), not_licenses_clients AS (
 	SELECT 
 		COUNT(*) AS "value",
-		'Клиенты без лицензий' AS "title"
+		'Без лицензий' AS "title"
 	FROM 
 		"clients"
 	WHERE
-		"license_uuid" IS NULL
+		"license_id" IS NULL
 ), process AS (
-	SELECT * FROM "all_clients" 
-	UNION
 	SELECT * FROM "paid_clients"
 	UNION
 	SELECT * FROM "free_clients"
