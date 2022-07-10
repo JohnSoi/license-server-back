@@ -20,10 +20,10 @@ class License(BaseClass):
             if filter_params.get('dateEnd'):
                 query = query.where(cls.get_model().create_at < filter_params.get('dateEnd'))
             if filter_params.get('onlyGroups'):
-                query = query.where(cls.get_model().group_id == None)
+                query = query.where(cls.get_model().license_id == None)
 
         return query
 
     @classmethod
     def _prepare_result(cls, result: List[dict], filter_params):
-        return get_hierarchy_list(result, 'group_id') if not filter_params.get('withoutHierarchy') and result else result
+        return get_hierarchy_list(result, 'license_id') if not filter_params.get('withoutHierarchy') and result else result
