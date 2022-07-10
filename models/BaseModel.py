@@ -1,13 +1,15 @@
 """Базовая реализация модели"""
 from sqlalchemy import Column, Integer, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, declarative_mixin, declared_attr
 
 from app import BaseModel as Model, engine
 
 
+@declarative_mixin
 class BaseModel(Model):
     """Базовая модель"""
-    session = engine.session()
+    __abstract__ = True
+    session = engine.session
 
     id = Column(Integer, primary_key=True)
 
@@ -15,13 +17,29 @@ class BaseModel(Model):
     update_at = Column(DateTime, nullable=True)
     delete_at = Column(DateTime, nullable=True)
 
-    create_user_id = Column(Integer, ForeignKey('users.id'))
-    update_user_id = Column(Integer, ForeignKey('users.id'))
-    delete_user_id = Column(Integer, ForeignKey('users.id'))
+    @declared_attr
+    def create_user_id(self):
+        return Column(Integer, ForeignKey('users.id'))
 
-    create_user = relationship("User", lazy='joined')
-    update_user = relationship("User", lazy='joined')
-    delete_user = relationship("User", lazy='joined')
+    @declared_attr
+    def update_user_id(self):
+        Column(Integer, ForeignKey('users.id'))
+
+    @declared_attr
+    def delete_user_id(self):
+        return Column(Integer, ForeignKey('users.id'))
+
+    @declared_attr
+    def create_user(self):
+        return relationship("User", lazy='joined')
+
+    @declared_attr
+    def update_user(self):
+        return relationship("User", lazy='joined')
+
+    @declared_attr
+    def delete_user(self):
+        return relationship("User", lazy='joined')
 
     def from_dict(self, record: dict) -> None:
         """

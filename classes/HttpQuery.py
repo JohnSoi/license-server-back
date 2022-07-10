@@ -33,3 +33,7 @@ class HttpQueryHelpers:
             'meta': meta,
             'navigation': navigation
         })
+
+    @staticmethod
+    def scalar_response(value):
+        return value

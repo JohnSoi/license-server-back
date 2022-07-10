@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.dialects.postgresql import ARRAY
 
-from models.BaseModel import BaseModel
+from app import BaseModel
 
 
 class Role(BaseModel):

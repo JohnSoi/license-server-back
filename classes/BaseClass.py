@@ -1,7 +1,7 @@
 """Базовая реализация CRUD"""
 import json
 
-from sqlalchemy import desc, or_
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from classes.HttpQuery import HttpQueryHelpers
@@ -20,7 +20,19 @@ class BaseClass:
     FIELD_ORDER: str = None
     AREA: str = 'BaseClass'
 
-    session = engine.session()
+    session: Session = engine.session
+    _additional_methods: dict = None
+
+    def __init__(self):
+        self.methods_map: dict = {
+            'Create': self.create,
+            'Get': self.get,
+            'Delete': self.delete,
+            'Update': self.update
+        }
+
+        if self._additional_methods:
+            self.methods_map.update(self._additional_methods)
 
     @staticmethod
     def get_model(new_model: bool = False):

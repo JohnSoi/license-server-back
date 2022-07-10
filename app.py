@@ -13,6 +13,7 @@ db = SQLAlchemy(app)
 BaseModel = db.Model
 migrate = Migrate(app, db)
 
+from routes import *
 
 if __name__ == '__main__':
     app.run()

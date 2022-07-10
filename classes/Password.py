@@ -4,9 +4,6 @@ import string
 import uuid
 import random
 
-from random_username.generate import generate_username
-
-
 class Password:
     """Класс для работы с паролями"""
     def __init__(self):
@@ -32,15 +29,6 @@ class Password:
         """
         password, salt = hashed_password.split(':')
         return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
-
-    @staticmethod
-    def create_random_login() -> str:
-        """
-        Создание случайного логина
-
-        :return Случайный логин
-        """
-        return generate_username(1)[0]
 
     @staticmethod
     def create_random_password() -> str:
