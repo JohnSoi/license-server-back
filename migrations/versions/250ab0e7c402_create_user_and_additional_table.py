@@ -1,8 +1,8 @@
 """create_user_and_additional_table
 
-Revision ID: 439d69279a97
+Revision ID: 250ab0e7c402
 Revises: 
-Create Date: 2022-07-10 23:18:28.101516
+Create Date: 2022-07-10 23:38:02.819801
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '439d69279a97'
+revision = '250ab0e7c402'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,9 +27,6 @@ def upgrade():
     op.create_index(op.f('ix_roles_name'), 'roles', ['name'], unique=False)
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('create_at', sa.DateTime(), nullable=True),
-    sa.Column('update_at', sa.DateTime(), nullable=True),
-    sa.Column('delete_at', sa.DateTime(), nullable=True),
     sa.Column('uuid', sa.Text(), nullable=True),
     sa.Column('name', sa.Text(), nullable=False),
     sa.Column('surname', sa.Text(), nullable=False),
@@ -41,10 +38,6 @@ def upgrade():
     sa.Column('date_birthday', sa.Date(), nullable=True),
     sa.Column('last_active', sa.DateTime(), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('create_user_id', sa.Integer(), nullable=True),
-    sa.Column('delete_user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['create_user_id'], ['users.id'], ),
-    sa.ForeignKeyConstraint(['delete_user_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('uuid')
@@ -54,17 +47,13 @@ def upgrade():
     op.create_index(op.f('ix_users_surname'), 'users', ['surname'], unique=False)
     op.create_table('history_service',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('create_at', sa.DateTime(), nullable=True),
-    sa.Column('update_at', sa.DateTime(), nullable=True),
-    sa.Column('delete_at', sa.DateTime(), nullable=True),
     sa.Column('object_id', sa.Integer(), nullable=True),
     sa.Column('type', sa.Text(), nullable=True),
     sa.Column('area', sa.Text(), nullable=True),
     sa.Column('text', sa.Text(), nullable=True),
-    sa.Column('create_user_id', sa.Integer(), nullable=True),
-    sa.Column('delete_user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['create_user_id'], ['users.id'], ),
-    sa.ForeignKeyConstraint(['delete_user_id'], ['users.id'], ),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('date', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_history_service_area'), 'history_service', ['area'], unique=False)

@@ -23,7 +23,7 @@ class BaseModel(Model):
 
     @declared_attr
     def update_user_id(self):
-        Column(Integer, ForeignKey('users.id'))
+        return Column(Integer, ForeignKey('users.id'))
 
     @declared_attr
     def delete_user_id(self):

@@ -4,13 +4,14 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, Text, Date, Boolean, ForeignKey, DateTime
 
 from classes.Password import Password
-from models.BaseModel import BaseModel
+from app import BaseModel
 from models.Role import Role
 
 
 class User(BaseModel):
     __tablename__ = 'users'
 
+    id = Column(Integer, primary_key=True)
     uuid = Column(Text, unique=True)
     name = Column(Text, nullable=False, index=True)
     surname = Column(Text, nullable=False, index=True)
