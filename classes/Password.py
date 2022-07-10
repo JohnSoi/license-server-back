@@ -4,6 +4,7 @@ import string
 import uuid
 import random
 
+
 class Password:
     """Класс для работы с паролями"""
     def __init__(self):
