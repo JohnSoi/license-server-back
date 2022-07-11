@@ -12,7 +12,6 @@ class User(BaseModel):
 
     _gurded = ['password']
 
-    id = Column(Integer, primary_key=True)
     uuid = Column(Text, unique=True)
     name = Column(Text, nullable=False, index=True)
     surname = Column(Text, nullable=False, index=True)
@@ -41,3 +40,6 @@ class User(BaseModel):
             )
         ])
         self.session.commit()
+
+    def _manual_response_fields(self, result: dict) -> None:
+        result['full_name'] = f'{self.surname} {self.name[0]}.{self.second_name[0] if self.second_name else ""}'

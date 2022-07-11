@@ -46,6 +46,8 @@ class BaseModel(Model):
 
         for column_name in columns:
             result[column_name] = getattr(self, column_name)
+
+        self._manual_response_fields(result)
         
         return result
 
@@ -55,7 +57,10 @@ class BaseModel(Model):
         """
         pass
 
-    def _manual_fillable(self, record: dict):
+    def _manual_fillable(self, record: dict) -> None:
+        pass
+
+    def _manual_response_fields(self, result: dict) -> None:
         pass
 
     def _get_columns(self) -> List[str]:
