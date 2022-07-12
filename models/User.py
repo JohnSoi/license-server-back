@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, Text, Date, Boolean, DateTime
+from sqlalchemy.dialects.postgresql import UUID
 
 from classes.Password import Password
 from models.BaseModel import BaseModel
@@ -12,7 +13,7 @@ class User(BaseModel):
 
     _gurded = ['password']
 
-    uuid = Column(Text, unique=True)
+    uuid = Column(UUID, unique=True)
     name = Column(Text, nullable=False, index=True)
     surname = Column(Text, nullable=False, index=True)
     second_name = Column(Text, nullable=True)

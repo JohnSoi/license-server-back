@@ -1,9 +1,11 @@
 from classes.User import User
+from classes.License import License
 
 
 class EndpointFactory:
     _ENDPOINT_MAP = {
-        'User': User
+        'User': User,
+        'License': License
     }
 
     def __init__(self, params: dict):
