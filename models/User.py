@@ -25,6 +25,8 @@ class User(BaseModel):
     date_birthday = Column(Date)
     last_active = Column(DateTime)
     is_active = Column(Boolean, default=True)
+    email = Column(Text, nullable=False)
+    telephone = Column(Text)
 
     def add_default_data(self):
         password_helpers = Password()
@@ -41,9 +43,16 @@ class User(BaseModel):
                 date_birthday=datetime.now().date(),
                 is_active=True,
                 create_at=datetime.now().date(),
+                email='test@mail.ru',
+                telephone='79999',
+                photo_url='http://image',
             )
         ])
         self.session.commit()
+
+    def _manual_fillable_fields(self, record: dict):
+        if not self.uuid:
+            self.uuid = uuid.UUID()
 
     def _manual_response_fields(self, result: dict) -> None:
         if self.name and self.surname:

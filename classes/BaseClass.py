@@ -132,6 +132,10 @@ class BaseClass:
             return HttpQueryHelpers.json_response(success=False, error_text='Не найдена запись по ключу')
 
     @classmethod
+    def _prepare_result(cls, result: list) -> list:
+        return result
+
+    @classmethod
     def _prepare_query_filter(cls, query, filter_params):
         """
         Подготовка фильтров основного запроса списка
