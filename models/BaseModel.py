@@ -1,4 +1,5 @@
 """Базовая реализация модели"""
+import uuid
 from datetime import datetime
 from typing import List
 
@@ -32,7 +33,7 @@ class BaseModel(Model):
         :return: Модель
         """
         fields = self._get_fillable_fields()
-        
+
         for field in fields:
             if field in record:
                 setattr(self, field, record.get(field))
@@ -43,6 +44,9 @@ class BaseModel(Model):
         self.update_at = datetime.now()
 
         self._manual_fillable_fields(record)
+
+        if hasattr(self, 'uuid') and not self.uuid:
+            self.uuid = str(uuid.uuid4())
 
         return self
 
@@ -59,7 +63,8 @@ class BaseModel(Model):
             result[column_name] = getattr(self, column_name)
 
         self._manual_response_fields(result)
-        
+        self._is_active_default(result)
+
         return result
 
     def add_default_data(self):
@@ -81,7 +86,7 @@ class BaseModel(Model):
         :return: Список доступных колонок
         """
         return self._get_columns_name(self._gurded)
-    
+
     def _get_fillable_fields(self):
         """
         Получение списка заполняемых полей
