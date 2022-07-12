@@ -29,7 +29,7 @@ def api_add_accrual_point():
     return Accrual.api_create_accrual(request_data)
 
 
-@app.route('/get_products_list', methods=['POST'])
+@app.route('/get_products_list', methods=['GET'])
 @cross_origin()
 def api_products_and_licenses():
     request_data = request.get_json() or {}

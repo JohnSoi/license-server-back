@@ -1,7 +1,7 @@
 """add_base_table
 
 Revision ID: a2acc96621a9
-Revises: 
+Revises:
 Create Date: 2022-07-20 16:37:52.594092
 
 """
