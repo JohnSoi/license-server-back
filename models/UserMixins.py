@@ -16,14 +16,3 @@ class UserMixins:
     def delete_user_id(self):
         return Column(Integer, ForeignKey('users.id'))
 
-    @declared_attr
-    def create_user(self):
-        return relationship("User", lazy='joined')
-
-    @declared_attr
-    def update_user(self):
-        return relationship("User", lazy='joined')
-
-    @declared_attr
-    def delete_user(self):
-        return relationship("User", lazy='joined')

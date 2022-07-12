@@ -28,7 +28,8 @@ class BaseClass:
             'Create': self.create,
             'Get': self.get,
             'Delete': self.delete,
-            'Update': self.update
+            'Update': self.update,
+            'List': self.list
         }
 
         if self._additional_methods:
@@ -59,14 +60,14 @@ class BaseClass:
             return HttpQueryHelpers.json_response(success=False, error_text='Не найдена запись по ключу')
 
     @classmethod
-    def list(cls, navigation: dict = None, filter_params: dict = None):
+    def list(cls, filter_params: dict = None):
         """
         Метод получения списка по навигации и сортировке
 
-        :param navigation: Навигация
         :param filter_params: Параметры фильтрации
         :return: Список с записями сущности
         """
+        navigation = filter_params.get('navigation')
         result = cls._prepare_list_result(navigation, filter_params)
 
         return HttpQueryHelpers.json_response(data=result, navigation=navigation if cls.USE_NAVIGATION else {})

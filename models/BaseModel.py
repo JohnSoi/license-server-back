@@ -23,17 +23,22 @@ class BaseModel(Model):
     update_at = Column(DateTime, nullable=True)
     delete_at = Column(DateTime, nullable=True)
 
-    def from_dict(self, record: dict) -> int:
+    def from_object(self, record: dict) -> int:
         """
         Создание записи модели из объекта
 
-        :param record:
-        :return:
+        :param record: Заполненая запись с начальными данными
+        :return: Модель
         """
+        fields = self._get_fillable_fields()
+        
+        for field in fields:
+            if field in record:
+                setattr(self, field, record.get(field))
 
-        self._manual_fillable(record)
+        self._manual_fillable_fields(record)
 
-        return 0
+        return self
 
     def to_dict(self) -> dict:
         """
@@ -57,7 +62,7 @@ class BaseModel(Model):
         """
         pass
 
-    def _manual_fillable(self, record: dict) -> None:
+    def _manual_fillable_fields(self, record: dict) -> None:
         pass
 
     def _manual_response_fields(self, result: dict) -> None:
@@ -69,11 +74,28 @@ class BaseModel(Model):
 
         :return: Список доступных колонок
         """
+        return self._get_columns_name(self._gurded)
+    
+    def _get_fillable_fields(self):
+        """
+        Получение списка заполняемых полей
+        
+        :return: Список заполняемых полей
+        """
+        return self._get_columns_name(self._manual_fillable)
+
+    def _get_columns_name(self, skip_fields: List[str]) -> List[str]:
+        """
+        Получение спика полей за исключением переданного списка
+        
+        :param skip_fields: Список полей, которые пропускаются
+        :return: Список доступных полей
+        """
         result = []
 
         columns = self.metadata.tables.get(self.__tablename__).columns
 
         if columns:
-            result = [column_name for column_name in columns.keys() if column_name not in self._gurded]
+            result = [column_name for column_name in columns.keys() if column_name not in skip_fields]
 
         return result
