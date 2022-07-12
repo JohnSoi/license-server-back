@@ -19,13 +19,12 @@ class User(BaseModel):
     second_name = Column(Text, nullable=True)
     photo_url = Column(Text)
     phone = Column(Text, nullable=True)
-    email = Column(Text)
+    email = Column(Text, nullable=True)
     login = Column(Text, index=True)
     password = Column(Text)
     date_birthday = Column(Date)
     last_active = Column(DateTime)
     is_active = Column(Boolean, default=True)
-    email = Column(Text, nullable=False)
     telephone = Column(Text)
 
     def add_default_data(self):
@@ -43,9 +42,7 @@ class User(BaseModel):
                 date_birthday=datetime.now().date(),
                 is_active=True,
                 create_at=datetime.now().date(),
-                email='test@mail.ru',
                 telephone='79999',
-                photo_url='http://image',
             )
         ])
         self.session.commit()

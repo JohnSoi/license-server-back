@@ -1,6 +1,5 @@
 from classes.User import User
 from classes.License import License
-from classes.TypePaid import TypePaid
 from classes.Client import Client
 from classes.Accrual import Accrual
 from classes.Product import Product
@@ -11,7 +10,6 @@ class EndpointFactory:
         'User': User,
         'License': License,
         'Client': Client,
-        'TypePaid': TypePaid,
         'Accrual': Accrual,
         'Product': Product
     }

@@ -11,7 +11,7 @@ class License(BaseModel, UserMixins):
     uuid = Column(UUID, unique=True)
     name = Column(Text, unique=True, index=True)
     cost = Column(Float)
-    group_uuid = Column(Integer, ForeignKey('licenses.id'))
+    license_id = Column(Integer, ForeignKey('licenses.id'))
     limitation = Column(JSON)
 
     def _manual_response_fields(self, result: dict):

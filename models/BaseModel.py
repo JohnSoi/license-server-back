@@ -25,7 +25,7 @@ class BaseModel(Model):
     update_at = Column(DateTime, nullable=True)
     delete_at = Column(DateTime, nullable=True)
 
-    def from_object(self, record: dict) -> int:
+    def from_object(self, record: dict):
         """
         Создание записи модели из объекта
 
@@ -63,7 +63,6 @@ class BaseModel(Model):
             result[column_name] = getattr(self, column_name)
 
         self._manual_response_fields(result)
-        self._is_active_default(result)
 
         return result
 
@@ -74,9 +73,19 @@ class BaseModel(Model):
         pass
 
     def _manual_fillable_fields(self, record: dict) -> None:
+        """
+        Ручное заполнение полей перед сохранением
+
+        :param record: Запись с данными
+        """
         pass
 
     def _manual_response_fields(self, result: dict) -> None:
+        """
+        Ручное заполнение полей перед выдачей ответа
+
+        :param result: Запись
+        """
         pass
 
     def _get_columns(self) -> List[str]:

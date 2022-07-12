@@ -88,7 +88,6 @@ class BaseClass:
         if isinstance(record, str):
             record = json.loads(record)
 
-
         if not record:
             data = model.to_dict()
         else:
