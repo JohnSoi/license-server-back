@@ -1,11 +1,17 @@
 from classes.User import User
 from classes.License import License
+from classes.TypePaid import TypePaid
+from classes.Client import Client
+from classes.Accrual import Accrual
 
 
 class EndpointFactory:
     _ENDPOINT_MAP = {
         'User': User,
-        'License': License
+        'License': License,
+        'Client': Client,
+        'TypePaid': TypePaid,
+        'Accrual': Accrual
     }
 
     def __init__(self, params: dict):

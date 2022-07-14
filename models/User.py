@@ -43,4 +43,5 @@ class User(BaseModel):
         self.session.commit()
 
     def _manual_response_fields(self, result: dict) -> None:
-        result['full_name'] = f'{self.surname} {self.name[0]}.{self.second_name[0] if self.second_name else ""}'
+        if self.name and self.surname:
+            result['full_name'] = f'{self.surname} {self.name[0]}.{self.second_name[0] if self.second_name else ""}'
