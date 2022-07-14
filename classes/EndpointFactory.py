@@ -38,7 +38,12 @@ class EndpointFactory:
             raise RuntimeError('Метод не найден в списке доступных')
 
         self._method = self._class.methods_map[params.get('method')]
-        self._data = params.get('data')
+        data = params.get('data') or {}
+        self._data = data.get('params')
+        self._filter = data.get('filter')
+        self._navigation = data.get('navigation')
+        self._sorting = data.get('sorting')
 
     def process(self):
-        return self._method(self._data)
+        return self._method(data=self._data, filter=self._filter,
+                            navigation=self._navigation, sorting=self._sorting)
