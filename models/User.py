@@ -23,6 +23,8 @@ class User(BaseModel):
     date_birthday = Column(Date)
     last_active = Column(DateTime)
     is_active = Column(Boolean, default=True)
+    email = Column(Text, nullable=False)
+    telephone = Column(Text)
 
     def add_default_data(self):
         password_helpers = Password()
@@ -38,9 +40,12 @@ class User(BaseModel):
                 date_birthday=datetime.now().date(),
                 is_active=True,
                 create_at=datetime.now().date(),
+                email='test@mail.ru',
+                telephone='79999',
             )
         ])
         self.session.commit()
 
     def _manual_response_fields(self, result: dict) -> None:
-        result['full_name'] = f'{self.surname} {self.name[0]}.{self.second_name[0] if self.second_name else ""}'
+        if self.name and self.surname:
+            result['full_name'] = f'{self.surname} {self.name[0]}.{self.second_name[0] if self.second_name else ""}'
