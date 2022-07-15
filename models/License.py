@@ -13,3 +13,6 @@ class License(BaseModel, UserMixins):
     cost = Column(Float)
     group_uuid = Column(UUID, nullable=True)
     limitation = Column(JSON)
+
+    def _manual_response_fields(self, result: dict):
+        result['cost'] = 0

@@ -17,7 +17,8 @@ class User(BaseClass):
     def get_model(new_model: bool = False):
         return UserModel() if new_model else UserModel
 
-    def login(self, data: dict):
+    def login(self, **kwargs):
+        data = kwargs.get('data')
         login = data.get('login')
         password = data.get('password')
 
@@ -35,7 +36,8 @@ class User(BaseClass):
             return HttpQueryHelpers.json_response(error_text='Пользователь не найден', success=False,
                                                   field_error='login')
 
-    def check_login(self, data: dict):
+    def check_login(self, **kwargs):
+        data = kwargs.get('data')
         login = data.get('login')
 
         employee = self.session.query(UserModel).filter(UserModel.login == login)

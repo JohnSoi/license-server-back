@@ -46,13 +46,13 @@ class BaseClass:
         return BaseModel() if new_model else BaseModel
 
     @classmethod
-    def get(cls, key: str):
+    def get(cls, **kwargs):
         """
         Получение записи по первичному ключу
 
-        :param key: Первичный ключ
         :return: Запись
         """
+        key = kwargs.get('data')
         query = cls.session.query(cls.get_model()).get(key)
         if query and query.count():
             return HttpQueryHelpers.json_response(data=query)
@@ -60,27 +60,27 @@ class BaseClass:
             return HttpQueryHelpers.json_response(success=False, error_text='Не найдена запись по ключу')
 
     @classmethod
-    def list(cls, filter_params: dict = None):
+    def list(cls, **kwargs):
         """
         Метод получения списка по навигации и сортировке
 
-        :param filter_params: Параметры фильтрации
         :return: Список с записями сущности
         """
-        navigation = filter_params.get('navigation')
+        navigation = kwargs.get('navigation')
+        filter_params = kwargs.get('filter')
         result = cls._prepare_list_result(navigation, filter_params)
 
         return HttpQueryHelpers.json_response(data=result, navigation=navigation if cls.USE_NAVIGATION else {})
 
     @classmethod
-    def create(cls, record: dict):
+    def create(cls, **kwargs):
         """
         Создание новой записи (не создает запись в БД, а только возвращает формат)
 
-        :param record: Предварительно заполненные данные
         :return: Запись в формате модели
         """
         model = cls.get_model(True)
+        record = kwargs.get('data')
 
         if isinstance(record, str):
             record = json.loads(record)
@@ -91,13 +91,13 @@ class BaseClass:
             return HttpQueryHelpers.json_response(data=model.from_object(record).to_dict())
 
     @classmethod
-    def update(cls, record: str):
+    def update(cls, **kwargs):
         """
         Обновление или создание записи в БД
 
-        :param record: Запись
         :return: Запись из БД
         """
+        record = kwargs.get('data')
         if not record:
             return HttpQueryHelpers.json_response(error_text='Нет данных для обновления', success=False)
 
@@ -110,13 +110,13 @@ class BaseClass:
             return cls._update(record)
 
     @classmethod
-    def delete(cls, key: str):
+    def delete(cls, **kwargs):
         """
         Удаление записи в БД
 
-        :param key: Первичный ключ
         :return: Результат удаления
         """
+        key = kwargs.get('data')
         query = cls.session.query(cls.get_model()).get(key)
         if query:
             cls.session.delete(query)
