@@ -33,7 +33,7 @@ class HistoryService:
             'text': text,
             'object_id': object_id,
             'area': area,
-            'user_id': engine.session.query(User).where(User.uuid == user_uuid).first().id
+            'user_id': engine.session.query(User).where(User.uuid == user_uuid).first().id if user_uuid else None
         })
         engine.session.add_all([model])
         engine.session.commit()

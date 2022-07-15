@@ -15,4 +15,5 @@ class License(BaseModel, UserMixins):
     limitation = Column(JSON)
 
     def _manual_response_fields(self, result: dict):
-        result['cost'] = 0
+        if result.get('cost') is None:
+            result['cost'] = 0
