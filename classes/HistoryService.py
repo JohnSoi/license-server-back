@@ -3,7 +3,7 @@ from app import engine
 from flask import request
 
 from constants.history_service import HISTORY_ACTIONS_TYPE
-from models import HistoryService as HistoryServiceModel
+from models.HistoryService import HistoryService as HistoryServiceModel
 from models.User import User
 
 

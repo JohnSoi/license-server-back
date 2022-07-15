@@ -21,8 +21,7 @@ class User(BaseClass):
         login = data.get('login')
         password = data.get('password')
 
-        employee = \
-            self.session.query(UserModel).filter(UserModel.login == login)
+        employee = self.session.query(UserModel).filter(UserModel.login == login)
         if employee.count():
             employee = employee.first()
 

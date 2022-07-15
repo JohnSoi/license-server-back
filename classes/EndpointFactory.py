@@ -3,6 +3,7 @@ from classes.License import License
 from classes.TypePaid import TypePaid
 from classes.Client import Client
 from classes.Accrual import Accrual
+from classes.Product import Product
 
 
 class EndpointFactory:
@@ -11,7 +12,8 @@ class EndpointFactory:
         'License': License,
         'Client': Client,
         'TypePaid': TypePaid,
-        'Accrual': Accrual
+        'Accrual': Accrual,
+        'Product': Product
     }
 
     def __init__(self, params: dict):
@@ -24,12 +26,12 @@ class EndpointFactory:
         if not params.get('endpointName'):
             raise RuntimeError('Не передан класс для работы')
 
-        self._endoint: str = params.get('endpointName')
+        self._endpoint: str = params.get('endpointName')
 
-        if self._endoint not in self._ENDPOINT_MAP:
+        if self._endpoint not in self._ENDPOINT_MAP:
             raise RuntimeError('Данная конечная точка не найдена')
 
-        self._class = self._ENDPOINT_MAP[self._endoint]()
+        self._class = self._ENDPOINT_MAP[self._endpoint]()
 
         if not params.get('method'):
             raise RuntimeError('Не передан метод')
