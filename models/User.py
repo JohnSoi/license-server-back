@@ -42,9 +42,14 @@ class User(BaseModel):
                 create_at=datetime.now().date(),
                 email='test@mail.ru',
                 telephone='79999',
+                photo_url='http://image',
             )
         ])
         self.session.commit()
+
+    def _manual_fillable_fields(self, record: dict):
+        if not self.uuid:
+            self.uuid = uuid.UUID()
 
     def _manual_response_fields(self, result: dict) -> None:
         if self.name and self.surname:

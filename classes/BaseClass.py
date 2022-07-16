@@ -70,6 +70,8 @@ class BaseClass:
         filter_params = kwargs.get('filter')
         result = cls._prepare_list_result(navigation, filter_params)
 
+        result = cls._prepare_result(result)
+
         return HttpQueryHelpers.json_response(data=result, navigation=navigation if cls.USE_NAVIGATION else {})
 
     @classmethod
@@ -124,6 +126,10 @@ class BaseClass:
             return HttpQueryHelpers.json_response(success=True)
         else:
             return HttpQueryHelpers.json_response(success=False, error_text='Не найдена запись по ключу')
+
+    @classmethod
+    def _prepare_result(cls, result: list) -> list:
+        return result
 
     @classmethod
     def _prepare_query_filter(cls, query, filter_params):
