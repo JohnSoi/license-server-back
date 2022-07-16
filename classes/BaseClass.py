@@ -1,5 +1,6 @@
 """Базовая реализация CRUD"""
 import json
+from typing import List
 
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
@@ -69,6 +70,8 @@ class BaseClass:
         navigation = kwargs.get('navigation')
         filter_params = kwargs.get('filter')
         result = cls._prepare_list_result(navigation, filter_params)
+
+        result = cls._prepare_result(result, filter_params)
 
         return HttpQueryHelpers.json_response(data=result, navigation=navigation if cls.USE_NAVIGATION else {})
 
@@ -208,3 +211,14 @@ class BaseClass:
             return HttpQueryHelpers.json_response(success=False,
                                                   error_text='Не найдена запись для обновления по id {}'
                                                   .format(record.get('id')))
+
+    @classmethod
+    def _prepare_result(cls, result: List[dict], filter_params: dict) -> List[dict]:
+        """
+        Пост обработка результатов
+
+        :param result: Итоговый список данных
+        :param filter_params: Параметры фильтрации
+        :return: Постобработанный список
+        """
+        return result

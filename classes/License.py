@@ -1,4 +1,7 @@
+from typing import List
+
 from classes.BaseClass import BaseClass
+from helpers.list_helpers import get_hierarchy_list
 from models.License import License as LicenseModel
 
 
@@ -17,8 +20,10 @@ class License(BaseClass):
             if filter_params.get('dateEnd'):
                 query = query.where(cls.get_model().create_at < filter_params.get('dateEnd'))
             if filter_params.get('onlyGroups'):
-                query = query.where(cls.get_model().group_uuid == None)
+                query = query.where(cls.get_model().group_id == None)
 
         return query
 
-
+    @classmethod
+    def _prepare_result(cls, result: List[dict], filter_params):
+        return get_hierarchy_list(result, 'group_id') if not filter_params.get('withoutHierarchy') else result
