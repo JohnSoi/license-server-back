@@ -54,8 +54,8 @@ class BaseClass:
         """
         key = kwargs.get('data')
         query = cls.session.query(cls.get_model()).get(key)
-        if query and query.count():
-            return HttpQueryHelpers.json_response(data=query)
+        if query:
+            return HttpQueryHelpers.json_response(data=query.to_dict())
         else:
             return HttpQueryHelpers.json_response(success=False, error_text='Не найдена запись по ключу')
 

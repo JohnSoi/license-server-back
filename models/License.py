@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Text, Float, JSON
+from sqlalchemy import Column, Text, Float, JSON, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 
 from models.BaseModel import BaseModel
@@ -11,7 +11,7 @@ class License(BaseModel, UserMixins):
     uuid = Column(UUID, unique=True)
     name = Column(Text, unique=True, index=True)
     cost = Column(Float)
-    group_uuid = Column(UUID, nullable=True)
+    group_id = Column(Integer, ForeignKey('licenses.id'))
     limitation = Column(JSON)
 
     def _manual_response_fields(self, result: dict):
