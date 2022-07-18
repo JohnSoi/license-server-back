@@ -11,3 +11,4 @@ class Product(BaseModel, UserMixins):
     name = Column(Text)
     description = Column(Text)
     group_uuid = Column(UUID)
+    photo_url = Column(Text, nullable=True)
