@@ -39,17 +39,12 @@ class Accrual(BaseClass):
                 query = query.where(cls.get_model().create_at > filter_params.get('dateStart'))
             if filter_params.get('dateEnd'):
                 query = query.where(cls.get_model().create_at < filter_params.get('dateEnd'))
-
-        return query
             if filter_params.get('searchString'):
                 query = query.where(cls.get_model().name.like(f'%{filter_params.get("searchString")}%'))
-            if filter_params.get('dateStart'):
-                query = query.where(cls.get_model().create_at > filter_params.get('dateStart'))
-            if filter_params.get('dateEnd'):
-                query = query.where(cls.get_model().create_at < filter_params.get('dateEnd'))
             if filter_params.get('isActive') is not None:
                 query = query.where(cls.get_model().is_active == filter_params.get('isActive'))
-            return query
+
+        return query
 
     @classmethod
     def api_create_accrual(cls, data):
