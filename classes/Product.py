@@ -10,7 +10,7 @@ class Product(BaseClass):
         return ProductModel() if new_model else ProductModel
 
     @classmethod
-    def get_products_and_licenses(self, **kwargs):
+    def api_products_and_licenses(self, **kwargs):
         data = kwargs.get('data') or {}
         product = data.get('name')
 

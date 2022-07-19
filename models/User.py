@@ -18,6 +18,8 @@ class User(BaseModel):
     surname = Column(Text, nullable=False, index=True)
     second_name = Column(Text, nullable=True)
     photo_url = Column(Text)
+    phone = Column(Text, nullable=True)
+    email = Column(Text, nullable=False)
     login = Column(Text, nullable=False, index=True)
     password = Column(Text, nullable=False)
     date_birthday = Column(Date)
