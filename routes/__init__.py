@@ -7,6 +7,7 @@ from classes.DevScript import DevScript
 from classes.EndpointFactory import EndpointFactory
 from classes.HttpQuery import HttpQueryHelpers
 from classes.Accrual import Accrual
+from helpers.PhotoLoader import PhotoLoader
 
 
 @app.route('/service', methods=['POST'])
@@ -32,5 +33,18 @@ def api_add_accrual_point():
 @app.route('/products', methods=['GET'])
 @cross_origin()
 def api_products_and_licenses():
-    request_Data = request.get_json()
-    return classes.Product.HttpQueryHelpers.json_response(request_Data, success=True)
+    request_data = request.get_json()
+    return classes.Product.HttpQueryHelpers.json_response(request_data, success=True)
+
+
+@app.route('/photo_load', methods=['POST'])
+@cross_origin()
+def load_photo():
+    request_data = request.files
+    return PhotoLoader().load(request_data)
+
+
+@app.route('/get_photo/<file_name>', methods=['GET'])
+@cross_origin()
+def get_photo(file_name):
+    return PhotoLoader().get(file_name)

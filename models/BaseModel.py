@@ -1,4 +1,5 @@
 """Базовая реализация модели"""
+from datetime import datetime
 from typing import List
 
 from sqlalchemy import Column, Integer, DateTime
@@ -35,6 +36,11 @@ class BaseModel(Model):
         for field in fields:
             if field in record:
                 setattr(self, field, record.get(field))
+
+        if not self.create_at:
+            self.create_at = datetime.now()
+
+        self.update_at = datetime.now()
 
         self._manual_fillable_fields(record)
 

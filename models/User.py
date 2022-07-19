@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, Text, Date, Boolean, DateTime
+from sqlalchemy import Column, Text, Date, Boolean, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 
 from classes.Password import Password
@@ -37,6 +37,7 @@ class User(BaseModel):
                 name='default',
                 surname='user',
                 second_name='user',
+                email='test@tes.ru',
                 date_birthday=datetime.now().date(),
                 is_active=True,
                 create_at=datetime.now().date(),
