@@ -42,3 +42,11 @@ class Accrual(BaseClass):
 
         return query
 
+    @classmethod
+    def create_accrual(self, **kwargs):
+        data = kwargs.get('data') or {}
+        client_uuid = data.get('clientUUID')
+        sum = data.get('sum')
+        if not client_uuid:
+            raise RuntimeError('Не передан UUID клиента')
+        return self.update({'sum': sum})
