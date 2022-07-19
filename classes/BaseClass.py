@@ -88,10 +88,13 @@ class BaseClass:
         if isinstance(record, str):
             record = json.loads(record)
 
+
         if not record:
-            return HttpQueryHelpers.json_response(data=model.to_dict())
+            data = model.to_dict()
         else:
-            return HttpQueryHelpers.json_response(data=model.from_object(record).to_dict())
+            data = model.from_object(record).to_dict()
+
+        return HttpQueryHelpers.json_response(data=data) if not kwargs.get('only_result') else data
 
     @classmethod
     def update(cls, **kwargs):
