@@ -10,6 +10,7 @@ from config.common import UPLOAD_FOLDER
 class PhotoLoader:
     def __init__(self):
         self._load_url = UPLOAD_FOLDER
+        self._check_load_folder()
 
     def load(self, data):
         file = data['file']
@@ -23,3 +24,7 @@ class PhotoLoader:
 
     def get(self, photo_name: str):
         return send_file(os.path.join(self._load_url, photo_name))
+
+    def _check_load_folder(self):
+        if not os.path.isdir(self._load_url):
+            os.mkdir(self._load_url)
