@@ -31,10 +31,10 @@ class Accrual(BaseClass):
         if filter_params:
             if filter_params.get('clientUUID'):
                 query = query.where(cls.get_model().client_uuid == filter_params.get('clientUUID'))
-            if filter_params.get('summax'):
-                query = query.where(cls.get_model().sum > filter_params.get('summax'))
-            if filter_params.get('summin'):
-                query = query.where(cls.get_model().sum < filter_params.get('summin'))
+            if filter_params.get('sumMax'):
+                query = query.where(cls.get_model().sum > filter_params.get('sumMax'))
+            if filter_params.get('sumMin'):
+                query = query.where(cls.get_model().sum < filter_params.get('sumMin'))
             if filter_params.get('dateStart'):
                 query = query.where(cls.get_model().create_at > filter_params.get('dateStart'))
             if filter_params.get('dateEnd'):
