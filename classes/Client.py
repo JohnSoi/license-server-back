@@ -19,5 +19,6 @@ class Client(BaseClass):
                 query = query.where(cls.get_model().create_at < filter_params.get('dateEnd'))
             if filter_params.get('isActive') is not None:
                 query = query.where(cls.get_model().is_active == filter_params.get('isActive'))
-            return query
+
+        return query
 

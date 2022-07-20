@@ -1,7 +1,7 @@
 from flask_cors import cross_origin
 from flask import request
 
-import classes.Product
+from classes.Product import Product
 from app import app
 from classes.DevScript import DevScript
 from classes.EndpointFactory import EndpointFactory
@@ -30,11 +30,11 @@ def api_add_accrual_point():
     return Accrual.api_create_accrual(request_data)
 
 
-@app.route('/products', methods=['GET'])
+@app.route('/get_products_list', methods=['POST'])
 @cross_origin()
 def api_products_and_licenses():
-    request_data = request.get_json()
-    return classes.Product.HttpQueryHelpers.json_response(request_data, success=True)
+    request_data = request.get_json() or {}
+    return Product.api_products_and_licenses(request_data)
 
 
 @app.route('/photo_load', methods=['POST'])

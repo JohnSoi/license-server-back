@@ -11,11 +11,14 @@ class Product(BaseClass):
 
     @classmethod
     def api_products_and_licenses(self, **kwargs):
+        """
+        Возвращает список продуктов и лицензий по ним в виде json по group_uuid
+        """
         data = kwargs.get('data') or {}
-        product = data.get('name')
+        group_uuid = data.get('group_uuid')
 
-        if not product:
-            raise RuntimeError('Не передано название продукта')
-        productList = self.list(filter={'product': product})
-        return HttpQueryHelpers.json_response(productList, success=True)
+        if not group_uuid:
+            raise RuntimeError('Не передан id группы лицензий')
+        product_list = self.list(filter={'product': group_uuid})
+        return HttpQueryHelpers.json_response(product_list, success=True)
 
