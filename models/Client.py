@@ -8,12 +8,12 @@ class Client(BaseModel, UserMixins):
     __tablename__ = 'clients'
 
     uuid = Column(UUID, unique=True)
-    name = Column(Text, nullable=False, index=True)
-    inn = Column(Text, nullable=False)
-    kpp = Column(Text, nullable=False)
+    name = Column(Text, index=True)
+    inn = Column(Text)
+    kpp = Column(Text)
     is_active = Column(Boolean, default=True)
     photo = Column(Text)
     phone = Column(Text, nullable=True)
-    email = Column(Text, nullable=False)
-    license_uuid = Column(UUID, nullable=True)
-
+    email = Column(Text)
+    license_uuid = Column(UUID, nullable=True, index=True)
+    photo_url = Column(Text, nullable=True)
