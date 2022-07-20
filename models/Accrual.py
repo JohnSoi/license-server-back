@@ -10,7 +10,7 @@ class Accrual(BaseModel, UserMixins):
 
     uuid = Column(UUID, unique=True)
     sum = Column(Float, default=0)
-    invoice_id = Column(Integer)
+    invoice_id = Column(Integer, index=True)
     client_uuid = Column(UUID)
     license_uuid = Column(UUID)
     type_paid_uuid = Column(UUID)

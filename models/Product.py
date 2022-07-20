@@ -8,7 +8,7 @@ from sqlalchemy.dialects.postgresql import UUID
 class Product(BaseModel, UserMixins):
     __tablename__ = 'products'
 
-    name = Column(Text)
+    name = Column(Text, index=True)
     description = Column(Text)
     group_uuid = Column(UUID)
     photo_url = Column(Text, nullable=True)

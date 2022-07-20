@@ -8,4 +8,4 @@ class TypePaid(BaseModel, UserMixins):
     __tablename__ = 'type_paids'
 
     uuid = Column(UUID, unique=True)
-    name = Column(Text, nullable=False, index=True)
+    name = Column(Text, index=True)
