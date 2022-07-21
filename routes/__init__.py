@@ -5,7 +5,6 @@ from classes.Product import Product
 from app import app
 from classes.DevScript import DevScript
 from classes.EndpointFactory import EndpointFactory
-from classes.HttpQuery import HttpQueryHelpers
 from classes.Accrual import Accrual
 from helpers.PhotoLoader import PhotoLoader
 
