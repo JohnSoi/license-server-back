@@ -17,3 +17,7 @@ class Client(BaseModel, UserMixins):
     email = Column(Text)
     license_uuid = Column(UUID, nullable=True, index=True)
     photo_url = Column(Text, nullable=True)
+
+    def _is_active_default(self, result: dict):
+        if result.get('is_active') is None:
+            result['is_active'] = True
