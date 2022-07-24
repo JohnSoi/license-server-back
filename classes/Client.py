@@ -1,6 +1,6 @@
-from app import engine
 from classes.HttpQuery import HttpQueryHelpers
-from classes.sql_templates.client import ACTIVITY_CLIENTS
+from classes.sql_templates.client import ACTIVITY_CLIENTS, NEW_CLIENTS
+from helpers.ChartCreator import ChartCreator
 from models.Client import Client as ClientModel
 from classes.BaseClass import BaseClass
 
@@ -8,7 +8,8 @@ from classes.BaseClass import BaseClass
 class Client(BaseClass):
     def __init__(self):
         self._additional_methods = {
-            'ChartData': self.get_chart_data
+            'ChartData': self.get_chart_data,
+            'NewClients': self.get_chart_data_new_clients
         }
         super().__init__()
 
@@ -34,21 +35,11 @@ class Client(BaseClass):
     def get_chart_data(cls, **kwargs):
         filters = kwargs.get('filter')
 
-        data = engine.engine.execute(ACTIVITY_CLIENTS).fetchall()
+        return HttpQueryHelpers.json_response(data=ChartCreator(ACTIVITY_CLIENTS, 'Активность клиентов').process())
 
-        result = {
-            'labels': [],
-            'datasets': [
-                {
-                    'label': 'Активность клиентов',
-                    'data': []
-                }
-            ]
-        }
+    @classmethod
+    def get_chart_data_new_clients(cls, **kwargs):
+        filters = kwargs.get('filter')
 
-        for item in data:
-            result.get('labels').append(item[1])
-            result.get('datasets')[0].get('data').append(item[0])
-
-        return HttpQueryHelpers.json_response(data=result)
+        return HttpQueryHelpers.json_response(data=ChartCreator(NEW_CLIENTS, 'Новые клиенты').process())
 

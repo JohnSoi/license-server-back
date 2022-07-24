@@ -13,5 +13,3 @@ class Accrual(BaseModel, UserMixins):
     invoice_id = Column(Integer, index=True)
     client_uuid = Column(Integer, ForeignKey('clients.id'))
     license_id = Column(Integer, ForeignKey('licenses.id'))
-
-
