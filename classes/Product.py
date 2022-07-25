@@ -26,13 +26,13 @@ class Product(BaseClass):
     @classmethod
     def api_products_and_licenses(cls, query, **kwargs):
         """
-        Возвращает список продуктов и лицензий по ним в виде json по uuid продукта
+        Возвращает список продуктов и лицензий по ним в виде json по id продукта
         """
         data = kwargs.get('data') or {}
-        product_uuid = data.get('productUUID')
+        product_id = data.get('productID')
 
-        if not product_uuid:
-            raise RuntimeError('Не передан id группы лицензий')
-        query = query.where(cls.get_model().group_uuid == relationship('licenses')).first()
+        if not product_id:
+            raise RuntimeError('Не передан id продукта')
+        query = query.where(cls.get_model().license_id == relationship('licenses')).first()
         product_list = cls.list(filter={'query': query})
         return HttpQueryHelpers.json_response(data=product_list.to_dict(), success=True)
