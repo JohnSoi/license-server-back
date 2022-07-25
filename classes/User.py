@@ -46,3 +46,12 @@ class User(BaseClass):
             return HttpQueryHelpers.json_response(data=employee.to_dict())
         else:
             return HttpQueryHelpers.json_response(error_text='Логин не найден', success=False, field_error='login')
+
+    @classmethod
+    def password_reset(cls, **kwargs):
+        data = kwargs.get('data')
+        password = data.get('password')
+
+        password.get_hash()
+
+        return cls.update(data=password)

@@ -1,3 +1,5 @@
+from sqlalchemy.orm import relationship
+
 from models.Product import Product as ProductModel
 
 from classes.BaseClass import BaseClass
@@ -22,14 +24,15 @@ class Product(BaseClass):
         return query
 
     @classmethod
-    def api_products_and_licenses(cls, **kwargs):
+    def api_products_and_licenses(cls, query, **kwargs):
         """
-        Возвращает список продуктов и лицензий по ним в виде json по group_uuid
+        Возвращает список продуктов и лицензий по ним в виде json по uuid продукта
         """
         data = kwargs.get('data') or {}
-        group_uuid = data.get('group_uuid')
+        product_uuid = data.get('productUUID')
 
-        if not group_uuid:
+        if not product_uuid:
             raise RuntimeError('Не передан id группы лицензий')
-        product_list = cls.list(filter={'group_uuid': group_uuid})
-        return HttpQueryHelpers.json_response(product_list, success=True)
+        query = query.where(cls.get_model().group_uuid == relationship('licenses')).first()
+        product_list = cls.list(filter={'query': query})
+        return HttpQueryHelpers.json_response(data=product_list.to_dict(), success=True)
