@@ -10,6 +10,7 @@ class License(BaseModel, UserMixins):
 
     uuid = Column(UUID, unique=True)
     name = Column(Text, unique=True, index=True)
+    client_uuid = Column(UUID)
     cost = Column(Float)
     group_id = Column(Integer, ForeignKey('licenses.id'))
     limitation = Column(JSON)

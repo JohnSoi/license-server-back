@@ -7,6 +7,7 @@ from classes.DevScript import DevScript
 from classes.EndpointFactory import EndpointFactory
 from classes.HttpQuery import HttpQueryHelpers
 from classes.Accrual import Accrual
+from classes.Client import Client
 from helpers.PhotoLoader import PhotoLoader
 
 
@@ -25,9 +26,17 @@ def add_default_data():
 
 
 @app.route('/accruals_create', methods=['POST'])
+@cross_origin()
 def api_add_accrual_point():
     request_data = request.get_json() or {}
     return Accrual.api_create_accrual(request_data)
+
+
+@app.route('/client_info', methods=['POST'])
+@cross_origin()
+def api_get_client():
+    request_data = request.get_json() or {}
+    return Client.api_get_client_info(request_data)
 
 
 @app.route('/get_products_list', methods=['POST'])

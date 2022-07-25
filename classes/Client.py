@@ -3,12 +3,15 @@ from classes.HttpQuery import HttpQueryHelpers
 from classes.sql_templates.client import ACTIVITY_CLIENTS
 from models.Client import Client as ClientModel
 from classes.BaseClass import BaseClass
+from sqlalchemy import desc
+from sqlalchemy.orm import Session
 
 
 class Client(BaseClass):
     def __init__(self):
         self._additional_methods = {
-            'ChartData': self.get_chart_data
+            'ChartData': self.get_chart_data,
+            'ClientData': self.api_get_client_info
         }
         super().__init__()
 
@@ -31,24 +34,36 @@ class Client(BaseClass):
         return query
 
     @classmethod
-    def get_chart_data(cls, **kwargs):
-        filters = kwargs.get('filter')
+    def api_get_client_info(cls, data):
+        """
+        API метод для отображения лицензий, начислений, продуктов пользователя
+        """
+        if not data.get('clientUUID'):
+            raise KeyError('Не передан параметр "clientUUID"')
 
-        data = engine.engine.execute(ACTIVITY_CLIENTS).fetchall()
+        query = cls.session.query(cls.get_model()).where(cls.get_model().uuid == data.get('clientUUID')).first()
 
-        result = {
-            'labels': [],
-            'datasets': [
-                {
-                    'label': 'Активность клиентов',
-                    'data': []
-                }
-            ]
-        }
+        if not query:
+            return HttpQueryHelpers.json_response(data=[])
 
-        for item in data:
-            result.get('labels').append(item[1])
-            result.get('datasets')[0].get('data').append(item[0])
+        @classmethod
+        def get_chart_data(cls, **kwargs):
+            filters = kwargs.get('filter')
 
-        return HttpQueryHelpers.json_response(data=result)
+            data = engine.engine.execute(ACTIVITY_CLIENTS).fetchall()
 
+            result = {
+                'labels': [],
+                'datasets': [
+                    {
+                        'label': 'Активность клиентов',
+                        'data': []
+                    }
+                ]
+            }
+
+            for item in data:
+                result.get('labels').append(item[1])
+                result.get('datasets')[0].get('data').append(item[0])
+
+            return HttpQueryHelpers.json_response(data=result)
