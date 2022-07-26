@@ -131,7 +131,14 @@ class BaseClass:
             return HttpQueryHelpers.json_response(success=False, error_text='Не найдена запись по ключу')
 
     @classmethod
-    def _prepare_result(cls, result: list) -> list:
+    def _prepare_result(cls, result: List[dict], filter_params: dict) -> List[dict]:
+        """
+        Пост обработка результатов
+
+        :param result: Итоговый список данных
+        :param filter_params: Параметры фильтрации
+        :return: Постобработанный список
+        """
         return result
 
     @classmethod
@@ -217,14 +224,3 @@ class BaseClass:
             return HttpQueryHelpers.json_response(success=False,
                                                   error_text='Не найдена запись для обновления по id {}'
                                                   .format(record.get('id')))
-
-    @classmethod
-    def _prepare_result(cls, result: List[dict], filter_params: dict) -> List[dict]:
-        """
-        Пост обработка результатов
-
-        :param result: Итоговый список данных
-        :param filter_params: Параметры фильтрации
-        :return: Постобработанный список
-        """
-        return result

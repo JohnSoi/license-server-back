@@ -26,4 +26,4 @@ class License(BaseClass):
 
     @classmethod
     def _prepare_result(cls, result: List[dict], filter_params):
-        return get_hierarchy_list(result, 'group_id') if not filter_params.get('withoutHierarchy') and result else result
+        return get_hierarchy_list(result, 'license_id') if not filter_params.get('withoutHierarchy') and result else result
