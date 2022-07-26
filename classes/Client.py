@@ -1,5 +1,5 @@
 from classes.HttpQuery import HttpQueryHelpers
-from classes.sql_templates.client import ACTIVITY_CLIENTS, NEW_CLIENTS
+from classes.sql_templates.client import ACTIVITY_CLIENTS, NEW_CLIENTS, TYPE_LICENSE_CLIENT
 from helpers.ChartCreator import ChartCreator
 from models.Client import Client as ClientModel
 from classes.BaseClass import BaseClass
@@ -9,7 +9,8 @@ class Client(BaseClass):
     def __init__(self):
         self._additional_methods = {
             'ChartData': self.get_chart_data,
-            'NewClients': self.get_chart_data_new_clients
+            'NewClients': self.get_chart_data_new_clients,
+            'LicensesClient': self.get_licenses_clients
         }
         super().__init__()
 
@@ -43,3 +44,8 @@ class Client(BaseClass):
 
         return HttpQueryHelpers.json_response(data=ChartCreator(NEW_CLIENTS, 'Новые клиенты').process())
 
+    @classmethod
+    def get_licenses_clients(cls, **kwargs):
+        filters = kwargs.get('filter')
+
+        return HttpQueryHelpers.json_response(data=ChartCreator(TYPE_LICENSE_CLIENT, 'Типы лицензий').process())
