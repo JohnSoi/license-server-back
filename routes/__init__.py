@@ -1,6 +1,7 @@
 from flask_cors import cross_origin
 from flask import request
 
+from classes.Client import Client
 from classes.Product import Product
 from app import app
 from classes.DevScript import DevScript
@@ -47,3 +48,33 @@ def load_photo():
 @cross_origin()
 def get_photo(file_name):
     return PhotoLoader().get(file_name)
+
+
+@app.route('/client_products', methods=['POST'])
+@cross_origin()
+def api_get_client():
+    """
+    Эндпоинт для получения продуктов клиента
+    """
+    request_data = request.get_json() or {}
+    return Client().get_client_product_by_UUID(request_data)
+
+
+@app.route('/client_licenses', methods=['POST'])
+@cross_origin()
+def api_get_client():
+    """
+    Эндпоинт для получения лицензий клиента
+    """
+    request_data = request.get_json() or {}
+    return Client().get_client_licenses_by_UUID(request_data)
+
+
+@app.route('/client_accruals', methods=['POST'])
+@cross_origin()
+def api_get_client():
+    """
+    Эндпоинт для получения начислений клиента
+    """
+    request_data = request.get_json() or {}
+    return Client().get_client_accruals_by_UUID(request_data)
