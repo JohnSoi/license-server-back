@@ -8,7 +8,8 @@ class User(BaseClass):
     def __init__(self):
         self._additional_methods = {
             'LoginCheck': self.check_login,
-            'Login': self.login
+            'Login': self.login,
+            'ChangePassword': self.reset_password
         }
 
         super().__init__()
@@ -46,3 +47,16 @@ class User(BaseClass):
             return HttpQueryHelpers.json_response(data=employee.to_dict())
         else:
             return HttpQueryHelpers.json_response(error_text='Логин не найден', success=False, field_error='login')
+
+    @classmethod
+    def reset_password(cls, **kwargs):
+        data = kwargs.get('data')
+        new_password = data.get('password')
+        user_info = cls.session.query(cls.get_model().where(cls.get_model().id == data.get('id'))).first()
+
+        if user_info:
+            user_info.password = Password.get_hash(new_password)
+            return HttpQueryHelpers.json_response(data=True)
+        else:
+            return HttpQueryHelpers.json_response(error_text=f'Не удалось найти запись по '
+                                                             f'указанному ID: {data.get("id")}',)
