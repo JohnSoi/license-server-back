@@ -2,6 +2,7 @@ from classes.HttpQuery import HttpQueryHelpers
 from classes.BaseClass import BaseClass
 from classes.Password import Password
 from models.User import User as UserModel
+from app import engine
 
 
 class User(BaseClass):
@@ -55,8 +56,21 @@ class User(BaseClass):
         user_info = cls.session.query(cls.get_model().where(cls.get_model().id == data.get('id'))).first()
 
         if user_info:
-            user_info.password = Password.get_hash(new_password)
+            user_info.password = Password().get_hash(new_password)
+            engine.session.add_all([user_info])
+            engine.session.commit()
             return HttpQueryHelpers.json_response(data=True)
         else:
             return HttpQueryHelpers.json_response(error_text=f'Не удалось найти запись по '
                                                              f'указанному ID: {data.get("id")}',)
+
+    @classmethod
+    def _prepare_query_filter(cls, query, filter_params):
+        if filter_params:
+            if filter_params.get('searchString'):
+                query = query.where(cls.get_model().name.like(f'%{filter_params.get("searchString")}%'))
+            if filter_params.get('dateStart'):
+                query = query.where(cls.get_model().create_at > filter_params.get('dateStart'))
+            if filter_params.get('dateEnd'):
+                query = query.where(cls.get_model().create_at < filter_params.get('dateEnd'))
+        return query
