@@ -178,11 +178,14 @@ class BaseClass:
         if cls.FIELD_ORDER:
             query.order_by(desc(cls.FIELD_ORDER))
 
-        if query and query.count():
-            result = [item.to_dict() for item in query]
+        count = query.count() if query else 0
+        if count:
+            result = [item.to_dict() for item in query.all()]
             if cls.USE_NAVIGATION:
-                navigation['hasMore'] = query.count() > navigation.get('pageSize') or 0
+                navigation['hasMore'] = count >= navigation.get('pageSize')
                 navigation['page'] = navigation.get('page') + 1
+        elif cls.USE_NAVIGATION:
+            navigation['hasMore'] = False
 
         return result
 

@@ -20,7 +20,7 @@ class License(BaseClass):
             if filter_params.get('dateEnd'):
                 query = query.where(cls.get_model().create_at < filter_params.get('dateEnd'))
             if filter_params.get('onlyGroups'):
-                query = query.where(cls.get_model().group_id == None)
+                query = query.where(cls.get_model().license_id == None)
 
         return query
 
