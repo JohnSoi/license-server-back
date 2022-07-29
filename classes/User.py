@@ -53,7 +53,7 @@ class User(BaseClass):
     def reset_password(cls, **kwargs):
         data = kwargs.get('data')
         new_password = data.get('password')
-        user_info = cls.session.query(cls.get_model().where(cls.get_model().id == data.get('id'))).first()
+        user_info = cls.session.query(cls.get_model()).where(cls.get_model().id == data.get('id')).first()
 
         if user_info:
             user_info.password = Password().get_hash(new_password)
