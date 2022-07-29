@@ -1,6 +1,5 @@
-from sqlalchemy.orm import relationship
-
 from models.Product import Product as ProductModel
+from models.License import License
 
 from classes.BaseClass import BaseClass
 from classes.HttpQuery import HttpQueryHelpers
@@ -24,17 +23,15 @@ class Product(BaseClass):
         return query
 
     @classmethod
-    def api_products_and_licenses(cls, query, **kwargs):
+    def api_products_and_licenses(cls, data):
         """
-        Возвращает список продуктов и лицензий по ним в виде json по uuid продукта
+        Возвращает список продуктов и лицензий по ним в виде json по id продукта
         """
-        data = kwargs.get('data') or {}
-        product_uuid = data.get('productuuID')
+        product_id = data.get('id')
 
-        if product_uuid:
-            query = query.where(cls.get_model().license_id == relationship('licenses.id')).first()
-            product_list = cls.list(data={'query': query})
+        if product_id:
+            query = cls.session.query(cls.list(data={cls.get_model().where(cls.get_model().license_id == data.get(License.license_id)).first()}))
+
+            return HttpQueryHelpers.json_response(data=query.to_dict(), success=True)
         else:
-            raise RuntimeError('Не передан id продукта')
-
-        return HttpQueryHelpers.json_response(data=product_list.to_dict(), success=True)
+            return HttpQueryHelpers.json_response(error_text='Не передан id продукта', success=False)
