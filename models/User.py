@@ -11,7 +11,8 @@ from models.BaseModel import BaseModel
 class User(BaseModel):
     __tablename__ = 'users'
 
-    _gurded = ['password']
+    _guarded = ['password']
+    _manual_fillable = ['password']
 
     uuid = Column(UUID, unique=True)
     name = Column(Text, index=True)
@@ -48,8 +49,8 @@ class User(BaseModel):
         self.session.commit()
 
     def _manual_fillable_fields(self, record: dict):
-        if not self.uuid:
-            self.uuid = uuid.UUID()
+        if record.get('password'):
+            self.password = Password().get_hash(record.get('password'))
 
     def _manual_response_fields(self, result: dict) -> None:
         if self.name and self.surname:

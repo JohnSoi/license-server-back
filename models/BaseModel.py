@@ -15,7 +15,7 @@ class BaseModel(Model):
     __abstract__ = True
     session = engine.session
 
-    _gurded: List[str] = []
+    _guarded: List[str] = []
     _fillable: List[str] = []
     _manual_fillable: List[str] = []
 
@@ -94,7 +94,7 @@ class BaseModel(Model):
 
         :return: Список доступных колонок
         """
-        return self._get_columns_name(self._gurded)
+        return self._get_columns_name(self._guarded)
 
     def _get_fillable_fields(self):
         """
