@@ -1,4 +1,5 @@
 from models.Product import Product as ProductModel
+from models.License import License
 
 from classes.BaseClass import BaseClass
 from classes.HttpQuery import HttpQueryHelpers
@@ -22,14 +23,15 @@ class Product(BaseClass):
         return query
 
     @classmethod
-    def api_products_and_licenses(cls, **kwargs):
+    def api_products_and_licenses(cls, data):
         """
-        Возвращает список продуктов и лицензий по ним в виде json по group_uuid
+        Возвращает список продуктов и лицензий по ним в виде json по id продукта
         """
-        data = kwargs.get('data') or {}
-        group_uuid = data.get('group_uuid')
+        product_id = data.get('id')
 
-        if not group_uuid:
-            raise RuntimeError('Не передан id группы лицензий')
-        product_list = cls.list(filter={'group_uuid': group_uuid})
-        return HttpQueryHelpers.json_response(product_list, success=True)
+        if product_id:
+            query = cls.session.query(cls.list(data={cls.get_model().where(cls.get_model().license_id == data.get(License.license_id)).first()}))
+
+            return HttpQueryHelpers.json_response(data=query.to_dict(), success=True)
+        else:
+            return HttpQueryHelpers.json_response(error_text='Не передан id продукта', success=False)
