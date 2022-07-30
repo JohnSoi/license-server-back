@@ -30,7 +30,7 @@ class Product(BaseClass):
         product_id = data.get('id')
 
         if product_id:
-            query = cls.session.query(cls.list(data={cls.get_model().where(cls.get_model().license_id == data.get(License.license_id)).first()}))
+            query = cls.session.query(cls.get_model().where(cls.get_model().license_id == data.get(License.license_id)).first())
 
             return HttpQueryHelpers.json_response(data=query.to_dict(), success=True)
         else:
