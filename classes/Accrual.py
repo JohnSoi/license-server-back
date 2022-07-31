@@ -1,3 +1,6 @@
+from classes.HttpQuery import HttpQueryHelpers
+from classes.sql_templates.accruals import MORE_PAID_CLIENTS
+from helpers.ChartCreator import ChartCreator
 from models.Accrual import Accrual as AccrualModel
 from classes.BaseClass import BaseClass
 
@@ -5,7 +8,8 @@ from classes.BaseClass import BaseClass
 class Accrual(BaseClass):
     def __init__(self):
         self._additional_methods = {
-            'GetAccrualsByClientId': self.get_accrual_by_client_id
+            'GetAccrualsByClientId': self.get_accrual_by_client_id,
+            'ChartData': self.get_chart_data
         }
 
         super().__init__()
@@ -59,3 +63,10 @@ class Accrual(BaseClass):
             raise RuntimeError('Не передан UUID клиента')
         update = cls.create(data={'clientUUID': client_uuid, 'licenseUUID': license_uuid, 'sum': sum}, only_result=True)
         return cls.update(data=update)
+
+    @classmethod
+    def get_chart_data(cls, **kwargs):
+        filters = kwargs.get('filter')
+
+        return HttpQueryHelpers.json_response(data=ChartCreator(
+            MORE_PAID_CLIENTS, 'Самые большие начисления').process())

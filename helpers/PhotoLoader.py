@@ -9,7 +9,7 @@ from config.common import UPLOAD_FOLDER
 
 class PhotoLoader:
     def __init__(self):
-        self._load_url = UPLOAD_FOLDER
+        self._load_url = UPLOAD_FOLDER + '\\images\\'
         self._check_load_folder()
 
     def load(self, data):
@@ -17,6 +17,7 @@ class PhotoLoader:
 
         if not file:
             return False
+
         filename = str(uuid.uuid4()) + secure_filename(file.filename)
         file.save(os.path.join(self._load_url, filename))
 
