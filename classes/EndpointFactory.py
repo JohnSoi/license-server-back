@@ -35,7 +35,7 @@ class EndpointFactory:
             raise RuntimeError('Не передан метод')
 
         if params.get('method') not in self._class.methods_map:
-            raise RuntimeError('Метод не найден в списке доступных')
+            raise RuntimeError(f'Метод {params.get("method")} не найден в списке доступных')
 
         self._method = self._class.methods_map[params.get('method')]
         data = params.get('data') or {}

@@ -1,8 +1,10 @@
 from classes.HttpQuery import HttpQueryHelpers
 from classes.sql_templates.client import ACTIVITY_CLIENTS, NEW_CLIENTS, TYPE_LICENSE_CLIENT
 from helpers.ChartCreator import ChartCreator
+from models.Accrual import Accrual
 from models.Client import Client as ClientModel
 from classes.BaseClass import BaseClass
+from models.License import License
 
 
 class Client(BaseClass):
@@ -10,7 +12,8 @@ class Client(BaseClass):
         self._additional_methods = {
             'ChartData': self.get_chart_data,
             'NewClients': self.get_chart_data_new_clients,
-            'LicensesClient': self.get_licenses_clients
+            'LicensesClient': self.get_licenses_clients,
+            'GetClientAccruals': self.get_accruals
         }
         super().__init__()
 
@@ -49,3 +52,16 @@ class Client(BaseClass):
         filters = kwargs.get('filter')
 
         return HttpQueryHelpers.json_response(data=ChartCreator(TYPE_LICENSE_CLIENT, 'Типы лицензий').process())
+    
+    @classmethod
+    def get_accruals(cls, **kwargs):
+        filter_params = kwargs.get('filter') or {}
+        client_id = filter_params.get('clientId')
+
+        if not client_id:
+            return HttpQueryHelpers.json_response(success=False, error_text='Не передан идентификатор клиента')
+
+        query = cls.session.query(Accrual).where(Accrual.client_id == client_id).all() or []
+
+        return HttpQueryHelpers.json_response(data=[item.to_dict() for item in query])
+
