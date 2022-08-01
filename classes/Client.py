@@ -1,3 +1,5 @@
+from sqlalchemy.orm import relationship
+
 from classes.HttpQuery import HttpQueryHelpers
 from classes.sql_templates.client import ACTIVITY_CLIENTS, NEW_CLIENTS, TYPE_LICENSE_CLIENT
 from helpers.ChartCreator import ChartCreator
@@ -65,3 +67,17 @@ class Client(BaseClass):
 
         return HttpQueryHelpers.json_response(data=[item.to_dict() for item in query])
 
+    @classmethod
+    def api_products_and_licenses(cls, data):
+        """
+        Возвращает список продуктов и лицензий по ним в виде json по id продукта
+        """
+        client_uuid = data.get('clientUUID')
+
+        if client_uuid:
+            query = cls.session.query(cls.list(data={
+                cls.get_model().where(cls.get_model().license_id == relationship(License)).first()}))
+
+            return HttpQueryHelpers.json_response(data=query.to_dict(), success=True)
+        else:
+            return HttpQueryHelpers.json_response(error_text='Не передан id продукта', success=False)

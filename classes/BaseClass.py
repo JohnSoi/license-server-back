@@ -169,7 +169,13 @@ class BaseClass:
                 'hasMore': False
             }
 
-        query = cls._prepare_query_filter(cls.session.query(cls.get_model()), filter_params)
+        if filter_params:
+            if filter_params.get('deleted' != True):
+                query = cls._prepare_query_filter(
+                    cls.session.query(cls.get_model()).where(cls.get_model().delete_at is None), filter_params)
+            else:
+                query = cls._prepare_query_filter(
+                    cls.session.query(cls.get_model()).where(cls.get_model().delete_at is not None), filter_params)
 
         if cls.USE_NAVIGATION:
             query = query.limit(navigation.get('pageSize')) \
