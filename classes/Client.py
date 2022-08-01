@@ -1,3 +1,5 @@
+import uuid
+
 from classes.HttpQuery import HttpQueryHelpers
 from classes.sql_templates.client import ACTIVITY_CLIENTS, NEW_CLIENTS, TYPE_LICENSE_CLIENT
 from helpers.ChartCreator import ChartCreator
@@ -52,7 +54,7 @@ class Client(BaseClass):
         filters = kwargs.get('filter')
 
         return HttpQueryHelpers.json_response(data=ChartCreator(TYPE_LICENSE_CLIENT, 'Типы лицензий').process())
-    
+
     @classmethod
     def get_accruals(cls, **kwargs):
         filter_params = kwargs.get('filter') or {}
@@ -65,3 +67,12 @@ class Client(BaseClass):
 
         return HttpQueryHelpers.json_response(data=[item.to_dict() for item in query])
 
+    @classmethod
+    def api_get_accruals(cls, **kwargs):
+        filter_params = kwargs.get('filter') or {}
+        client_uuid = filter_params.get('clientUUID')
+        if not client_uuid:
+            return HttpQueryHelpers.json_response(success=False, error_text='Не передан uuid клиента')
+        client_id = cls.session.query(cls.get_model().id).where(cls.get_model().uuid == client_uuid).first()
+        client_id = client_id[0]
+        return cls.get_accruals(filter={'clientId': client_id})

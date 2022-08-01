@@ -1,6 +1,7 @@
 from flask_cors import cross_origin
 from flask import request
 
+from classes.Client import Client
 from classes.Product import Product
 from app import app
 from classes.DevScript import DevScript
@@ -47,3 +48,11 @@ def load_photo():
 @cross_origin()
 def get_photo(file_name):
     return PhotoLoader().get(file_name)
+
+
+@app.route('/get_accruals', methods=['POST'])
+@cross_origin()
+def get_client_accruals():
+    request_data = request.get_json() or {}
+    return Client().api_get_accruals(filter=request_data)
+
