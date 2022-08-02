@@ -68,15 +68,14 @@ class Client(BaseClass):
         return HttpQueryHelpers.json_response(data=[item.to_dict() for item in query])
 
     @classmethod
-    def api_products_and_licenses(cls, data):
+    def api_get_licenses(cls, data):
         """
         Возвращает список продуктов и лицензий по ним в виде json по id продукта
         """
         client_uuid = data.get('clientUUID')
 
         if client_uuid:
-            query = cls.session.query(cls.list(data={
-                cls.get_model().where(cls.get_model().license_id == relationship(License)).first()}))
+            query = cls.session.query(License).where(License.license_id == ClientModel.license_id).first()
 
             return HttpQueryHelpers.json_response(data=query.to_dict(), success=True)
         else:

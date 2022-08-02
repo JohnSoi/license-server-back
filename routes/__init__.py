@@ -33,7 +33,7 @@ def api_add_accrual_point():
 @cross_origin()
 def api_products_and_licenses():
     request_data = request.get_json() or {}
-    return Client.api_products_and_licenses(request_data)
+    return Client.api_get_licenses(request_data)
 
 
 @app.route('/photo_load', methods=['POST'])
